@@ -346,15 +346,37 @@ RichText::make('Html', function() {
 
 ### Image
 
+When using an `Image` column, it will use the value as `path` when resolving it on the default disk.
+
+```php
+Image::make('Avatar');
+```
+
+You can provide any other disk by using the `->disk()` method.
+
+```php
+Image::make('Avatar')->disk('uploads');
+```
+
+If you need more control over how the absolute image path should be resolved, you can do so via a callback.
+
 ```php
 Image::make('Avatar', function(User $user) {
     return Storage::path($user->avatar);
-})->width(100)->height(100);
+});
 ```
 
 :::warning
-Make sure to provide an absolute path
+Make sure to always provide an absolute path.
 :::
+
+#### Dimensions
+
+Image width and height can be set using the `->width()` and `->height()` methods. Setting them will also influence the column width and row height.
+
+```php
+Image::make('Avatar')->width(100)->height(100);
+```
 
 ### Formula
 
