@@ -82,7 +82,7 @@ module.exports = {
         ],
 
         sidebar: {
-            // '/4.x/': require('./4.x'),
+            '/4.x/': require('./4.x'),
             '/3.1/': require('./3.1'),
             '/3.0/': require('./3.0'),
             '/2.1/': require('./2.1'),

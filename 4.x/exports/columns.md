@@ -21,10 +21,10 @@ Per column a data type can be configured. This is very useful when dealing with 
 
 [[toc]]
 
-## What are columns?
+## What is a column?
 
 A column in a spreadsheet is a vertical series of cells in a spreadsheet. In the example underneath `A` and `B` are
-columns.
+columns. `1` and `2` are rows and `A1`, `A2`, ... are cells.
 
 | |A|B| 
 |---|---|---|
@@ -102,17 +102,23 @@ Column::make('{Title}', '{attribute}');
 A column consist of a required `title` which will be used as column header. The second parameter refers to the name of
 the `attribute` of the model.
 
+#### Auto resolving attributes
+
 If no `attribute` is passed, the title will be converted to a snake case attribute.
 
 ```php
 Text::make('Name'); // uses "name" attribute
 ```
 
+#### Relation attributes
+
 When working with relationships (e.g. HasOne and BelongsTo), you can use a dot notation as attribute:
 
 ```php
 Text::make('Office', 'office.name'); // uses "name" attribute of the "office" BelongsTo relationship.
 ```
+
+#### Computed values
 
 A callback can also be passed as second argument. The closure will get the row or Model. Whatever is returned within the
 closure, will be inserted in the cell.
@@ -123,11 +129,25 @@ Text::make('Uppercased Name', function(User $user) {
 });
 ```
 
+#### Data types
+
 By using a specific data type, that data type will automatically configure the right internal data type and number
 formatting for Excel.
 
 ```php
 Date::make('Date of Birth', 'dob');
+```
+
+#### Nullable values
+
+When using specific data types, the column will always force the datatype when exporting. This means that a `null` value will be written as a `0` when using a `Number` column.
+If you want to make sure the cell stays empty, you can mark the column as `->nullable()`.
+
+```php
+[
+    Number::make('Amount'),
+    Number::make('Amount Nullable')->nullable(),
+]
 ```
 
 ### Using different data sources
