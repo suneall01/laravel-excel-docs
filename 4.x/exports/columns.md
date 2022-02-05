@@ -184,7 +184,8 @@ class UsersExport implements FromArray, WithColumns
 
 ### Custom type
 
-By using the `type()` setter, you can set any PhpSpreadsheet DataType to the specific column cells.
+Types refer to the internal type that Excel uses to determine which kind of value is inside a cell like strings, numbers, ...
+By using the `type()` setter, you can set any PhpSpreadsheet `DataType` to the specific column cells. It's advised to use the dedicated Column classes like `Text` and `Number`, however, it can be useful when you want to programmatically set the data type.
 
 ```php
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -194,15 +195,20 @@ Column::make('Name')->type(DataType::TYPE_STRING);
 
 ### Custom number format
 
-By using the `format()` setter, you can set any PhpSpreadsheet NumberFormat to the specific column cells.
+Formats is what Excel uses to dynamically change how cells are displayed, like a float value that is shown as a percentage.
+By using the `format()` setter, you can configure any PhpSpreadsheet `NumberFormat` to the specific column cells or provide a completely custom format.
+The dedicated column classes already provide default formatting based on the column type, but it can be useful if you want to programmatically change any format code.
 
 ```php
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 Column::make('Name')->format(NumberFormat::FORMAT_TEXT);
+Column::make('Number')->format('#,##0.00');
 ```
 
 ### Text
+
+If you want values to be explicitly formatted and inserted as strings, you can use the `Text` column. This can be really useful when dealing with values like phone numbers that have a leading 0. Because of PhpSpreadsheet's default value binder, those values will be detected as a number and therefor inserted as a numeric value in the spreadsheet. Marking these columns as text will overrule the default value binder.
 
 ```php
 Text::make('Name');
@@ -210,17 +216,19 @@ Text::make('Name');
 
 ### Number
 
+To explicitly mark a column as numeric the `Number` column can be used. This column type will format the numeric value as an integer (without the decimals), however the underlying value will remain the full number.
+
 ```php
 Number::make('ID');
 ```
 
-Optionally you can enable decimals on the number.
+If you want the number to display including 2 decimals, you can indicate so via the `withDecimals` method.
 
 ```php
 Number::make('ID')->withDecimals();
 ```
 
-Or provide the entire number format yourself.
+If you want to customize how the number should be formatted in the Excel file, you can use the `format` method.
 
 ```php
 Number::make('ID')->format('#,##0.00');
@@ -228,14 +236,10 @@ Number::make('ID')->format('#,##0.00');
 
 ### Decimal
 
+As an alternative to using `withDecimals` on the `Number` column, you also directly use the `Decimal` column type. This column type will format to exactly 2 decimals. If you want another format, you can do so via the `->format()` method. 
+
 ```php
 Decimal::make('Average Working Hours');
-```
-
-You can provide a custom decimal number format with the `format()` method.
-
-```php
-Decimal::make('Average Working Hours')->format('#,##0.00');
 ```
 
 ### Percentage
