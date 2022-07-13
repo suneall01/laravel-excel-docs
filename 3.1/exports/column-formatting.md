@@ -216,7 +216,7 @@ class InvoicesExport implements WithDefaultStyles
         return [
             'fill' => [
                 'fillType'   => Fill::FILL_SOLID,
-                'startColor' => ['argb' => Color::RED],
+                'startColor' => ['argb' => Color::COLOR_RED],
             ],
         ];
     }
